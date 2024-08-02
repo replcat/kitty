@@ -224,26 +224,25 @@ def add_line(buf: CBufType, cell_width: int, position: int, thickness: int, cell
 
 
 def add_dline(buf: CBufType, cell_width: int, position: int, thickness: int, cell_height: int) -> None:
-    a = min(position - thickness, cell_height - 1)
-    b = min(position, cell_height - 1)
-    top, bottom = min(a, b), max(a, b)
-    deficit = 2 - (bottom - top)
-    if deficit > 0:
-        if bottom + deficit < cell_height:
-            bottom += deficit
-        elif bottom < cell_height - 1:
-            bottom += 1
-            if deficit > 1:
-                top -= deficit - 1
-        else:
-            top -= deficit
-    top = max(0, min(top, cell_height - 1))
-    bottom = max(0, min(bottom, cell_height - 1))
-    for y in {top, bottom}:
-        ctypes.memset(ctypes.addressof(buf) + (cell_width * y), 255, cell_width)
+    thickness *= 2
+
+    # Set the first 'thickness' rows of the cell to white
+    for i in range(thickness):
+        ctypes.memset(ctypes.addressof(buf) + (cell_width * i), 255, cell_width)
+
+    # Set the last 'thickness' rows of the cell to white
+    for i in range(cell_height - thickness, cell_height):
+        ctypes.memset(ctypes.addressof(buf) + (cell_width * i), 255, cell_width)
+
+    # Set the first 'thickness' pixels and the last 'thickness' pixels of each row in the cell to white
+    for y in range(thickness, cell_height - thickness):
+        for x in range(thickness):
+            buf[cell_width * y + x] = 255
+            buf[cell_width * y + cell_width - 1 - x] = 255
 
 
 def add_curl(buf: CBufType, cell_width: int, position: int, thickness: int, cell_height: int) -> None:
+    thickness *= 2
     max_x, max_y = cell_width - 1, cell_height - 1
     opts = get_options()
     xfactor = (4.0 if 'dense' in opts.undercurl_style else 2.0) * pi / max_x
@@ -280,6 +279,7 @@ def add_curl(buf: CBufType, cell_width: int, position: int, thickness: int, cell
 
 
 def add_dots(buf: CBufType, cell_width: int, position: int, thickness: int, cell_height: int) -> None:
+    thickness *= 4
     spacing, size = distribute_dots(cell_width, cell_width // (2 * thickness))
 
     y = 1 + position - thickness // 2
@@ -289,6 +289,7 @@ def add_dots(buf: CBufType, cell_width: int, position: int, thickness: int, cell
 
 
 def add_dashes(buf: CBufType, cell_width: int, position: int, thickness: int, cell_height: int) -> None:
+    thickness *= 4
     halfspace_width = cell_width // 4
     y = 1 + position - thickness // 2
     for i in range(y, min(y + thickness, cell_height)):
