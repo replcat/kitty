@@ -290,11 +290,11 @@ def add_dots(buf: CBufType, cell_width: int, position: int, thickness: int, cell
 
 def add_dashes(buf: CBufType, cell_width: int, position: int, thickness: int, cell_height: int) -> None:
     thickness *= 4
-    halfspace_width = cell_width // 4
     y = 1 + position - thickness // 2
     for i in range(y, min(y + thickness, cell_height)):
-        buf[cell_width * i:cell_width * i + (cell_width - 3 * halfspace_width)] = [255] * (cell_width - 3 * halfspace_width)
-        buf[cell_width * i + 3 * halfspace_width:cell_width * (i + 1)] = [255] * (cell_width - 3 * halfspace_width)
+        start_index = cell_width * i + cell_width // 4
+        end_index = cell_width * i + (3 * cell_width // 4)
+        buf[start_index:end_index] = [255] * (end_index - start_index)
 
 
 def render_special(
