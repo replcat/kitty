@@ -216,25 +216,21 @@ UnderlineCallback = Callable[[CBufType, int, int, int, int], None]
 
 
 def add_line(buf: CBufType, cell_width: int, position: int, thickness: int, cell_height: int) -> None:
-    y = position - thickness // 2
-    while thickness > 0 and -1 < y < cell_height:
-        thickness -= 1
-        ctypes.memset(ctypes.addressof(buf) + (cell_width * y), 255, cell_width)
-        y += 1
+    thickness = max(1, cell_height // 12)
 
-
-def add_dline(buf: CBufType, cell_width: int, position: int, thickness: int, cell_height: int) -> None:
-    thickness *= 2
-
-    # Set the first 'thickness' rows of the cell to white
-    for i in range(thickness):
-        ctypes.memset(ctypes.addressof(buf) + (cell_width * i), 255, cell_width)
-
-    # Set the last 'thickness' rows of the cell to white
     for i in range(cell_height - thickness, cell_height):
         ctypes.memset(ctypes.addressof(buf) + (cell_width * i), 255, cell_width)
 
-    # Set the first 'thickness' pixels and the last 'thickness' pixels of each row in the cell to white
+
+def add_dline(buf: CBufType, cell_width: int, position: int, thickness: int, cell_height: int) -> None:
+    thickness = max(1, cell_height // 12)
+
+    for i in range(thickness):
+        ctypes.memset(ctypes.addressof(buf) + (cell_width * i), 255, cell_width)
+
+    for i in range(cell_height - thickness, cell_height):
+        ctypes.memset(ctypes.addressof(buf) + (cell_width * i), 255, cell_width)
+
     for y in range(thickness, cell_height - thickness):
         for x in range(thickness):
             buf[cell_width * y + x] = 255
@@ -242,7 +238,8 @@ def add_dline(buf: CBufType, cell_width: int, position: int, thickness: int, cel
 
 
 def add_curl(buf: CBufType, cell_width: int, position: int, thickness: int, cell_height: int) -> None:
-    thickness *= 2
+    thickness = max(1, cell_height // 12)
+
     max_x, max_y = cell_width - 1, cell_height - 1
     opts = get_options()
     xfactor = (4.0 if 'dense' in opts.undercurl_style else 2.0) * pi / max_x
@@ -279,8 +276,8 @@ def add_curl(buf: CBufType, cell_width: int, position: int, thickness: int, cell
 
 
 def add_dots(buf: CBufType, cell_width: int, position: int, thickness: int, cell_height: int) -> None:
-    thickness *= 4
-    spacing, size = distribute_dots(cell_width, cell_width // (2 * thickness))
+    thickness = max(1, cell_height // 6)
+    spacing, size = distribute_dots(cell_width, 2)
 
     y = 1 + position - thickness // 2
     for i in range(y, min(y + thickness, cell_height)):
@@ -289,7 +286,8 @@ def add_dots(buf: CBufType, cell_width: int, position: int, thickness: int, cell
 
 
 def add_dashes(buf: CBufType, cell_width: int, position: int, thickness: int, cell_height: int) -> None:
-    thickness *= 4
+    thickness = max(1, cell_height // 6)
+
     y = 1 + position - thickness // 2
     for i in range(y, min(y + thickness, cell_height)):
         start_index = cell_width * i + cell_width // 4
