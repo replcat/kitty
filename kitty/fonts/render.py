@@ -216,10 +216,11 @@ UnderlineCallback = Callable[[CBufType, int, int, int, int], None]
 
 
 def add_line(buf: CBufType, cell_width: int, position: int, thickness: int, cell_height: int) -> None:
-    thickness = max(1, cell_height // 12)
-
-    for i in range(cell_height - thickness, cell_height):
-        ctypes.memset(ctypes.addressof(buf) + (cell_width * i), 255, cell_width)
+    y = position - thickness // 2
+    while thickness > 0 and -1 < y < cell_height:
+        thickness -= 1
+        ctypes.memset(ctypes.addressof(buf) + (cell_width * y), 255, cell_width)
+        y += 1
 
 
 def add_dline(buf: CBufType, cell_width: int, position: int, thickness: int, cell_height: int) -> None:
@@ -275,6 +276,13 @@ def add_curl(buf: CBufType, cell_width: int, position: int, thickness: int, cell
             add_intensity(x, y1 + t, 255)
 
 
+def add_solid(buf: CBufType, cell_width: int, position: int, thickness: int, cell_height: int) -> None:
+    thickness = max(1, cell_height // 12)
+
+    for i in range(cell_height - thickness, cell_height):
+        ctypes.memset(ctypes.addressof(buf) + (cell_width * i), 255, cell_width)
+
+
 def add_dots(buf: CBufType, cell_width: int, position: int, thickness: int, cell_height: int) -> None:
     thickness = max(1, cell_height // 12)
     spacing, size = distribute_dots(cell_width, 2)
@@ -326,7 +334,7 @@ def render_special(
         t = underline_thickness
         if underline > 1:
             t = max(1, min(cell_height - underline_position - 1, t))
-        dl([add_line, add_line, add_dline, add_curl, add_dots, add_dashes][underline], underline_position, t, cell_height)
+        dl([add_solid, add_solid, add_dline, add_curl, add_dots, add_dashes][underline], underline_position, t, cell_height)
     if strikethrough:
         dl(add_line, strikethrough_position, strikethrough_thickness, cell_height)
 
