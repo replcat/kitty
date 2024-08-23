@@ -276,20 +276,18 @@ def add_curl(buf: CBufType, cell_width: int, position: int, thickness: int, cell
 
 
 def add_dots(buf: CBufType, cell_width: int, position: int, thickness: int, cell_height: int) -> None:
-    thickness = max(1, cell_height // 6)
+    thickness = max(1, cell_height // 12)
     spacing, size = distribute_dots(cell_width, 2)
 
-    y = 1 + position - thickness // 2
-    for i in range(y, min(y + thickness, cell_height)):
+    for i in range(cell_height - thickness, cell_height):
         for j, s in enumerate(spacing):
             buf[cell_width * i + j * size + s: cell_width * i + (j + 1) * size + s] = [255] * size
 
 
 def add_dashes(buf: CBufType, cell_width: int, position: int, thickness: int, cell_height: int) -> None:
-    thickness = max(1, cell_height // 6)
+    thickness = max(1, cell_height // 12)
 
-    y = 1 + position - thickness // 2
-    for i in range(y, min(y + thickness, cell_height)):
+    for i in range(cell_height - thickness, cell_height):
         start_index = cell_width * i + cell_width // 4
         end_index = cell_width * i + (3 * cell_width // 4)
         buf[start_index:end_index] = [255] * (end_index - start_index)
