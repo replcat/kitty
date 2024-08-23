@@ -239,13 +239,14 @@ def add_dline(buf: CBufType, cell_width: int, position: int, thickness: int, cel
 
 
 def add_curl(buf: CBufType, cell_width: int, position: int, thickness: int, cell_height: int) -> None:
-    thickness = max(1, cell_height // 12)
+    thickness = max(1, cell_height // 12) # match underlines when undercurl style is "thick"
+    position = 999 # i.e. pin to bottom
 
     max_x, max_y = cell_width - 1, cell_height - 1
     opts = get_options()
     xfactor = (4.0 if 'dense' in opts.undercurl_style else 2.0) * pi / max_x
 
-    max_height = cell_height - (position - thickness // 2)  # descender from the font
+    max_height = cell_height // 5
     half_height = max(1, max_height // 4)
     if 'thick' in opts.undercurl_style:
         thickness = max(half_height, thickness)
