@@ -224,7 +224,7 @@ def add_line(buf: CBufType, cell_width: int, position: int, thickness: int, cell
 
 
 def add_dline(buf: CBufType, cell_width: int, position: int, thickness: int, cell_height: int) -> None:
-    thickness = max(1, cell_height // 12)
+    thickness = max(1, cell_height // 16)
 
     for i in range(thickness):
         ctypes.memset(ctypes.addressof(buf) + (cell_width * i), 255, cell_width)
@@ -239,7 +239,7 @@ def add_dline(buf: CBufType, cell_width: int, position: int, thickness: int, cel
 
 
 def add_curl(buf: CBufType, cell_width: int, position: int, thickness: int, cell_height: int) -> None:
-    thickness = max(1, cell_height // 12) # match underlines when undercurl style is "thick"
+    thickness = max(1, cell_height // 24) # match the *feel* of underlines (when undercurl style is "thick")
     position = 999 # i.e. pin to bottom
 
     max_x, max_y = cell_width - 1, cell_height - 1
@@ -278,14 +278,14 @@ def add_curl(buf: CBufType, cell_width: int, position: int, thickness: int, cell
 
 
 def add_solid(buf: CBufType, cell_width: int, position: int, thickness: int, cell_height: int) -> None:
-    thickness = max(1, cell_height // 12)
+    thickness = max(1, cell_height // 16)
 
     for i in range(cell_height - thickness, cell_height):
         ctypes.memset(ctypes.addressof(buf) + (cell_width * i), 255, cell_width)
 
 
 def add_dots(buf: CBufType, cell_width: int, position: int, thickness: int, cell_height: int) -> None:
-    thickness = max(1, cell_height // 12)
+    thickness = max(1, cell_height // 16)
     spacing, size = distribute_dots(cell_width, 2)
 
     for i in range(cell_height - thickness, cell_height):
@@ -294,7 +294,7 @@ def add_dots(buf: CBufType, cell_width: int, position: int, thickness: int, cell
 
 
 def add_dashes(buf: CBufType, cell_width: int, position: int, thickness: int, cell_height: int) -> None:
-    thickness = max(1, cell_height // 12)
+    thickness = max(1, cell_height // 16)
 
     for i in range(cell_height - thickness, cell_height):
         start_index = cell_width * i + cell_width // 4
