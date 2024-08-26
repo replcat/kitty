@@ -74,7 +74,12 @@ consumption to do the same tasks.
 Detailed list of changes
 -------------------------------------
 
-0.36.1 [future]
+0.36.2 [future]
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+- Linux: Fix a regression in 0.36.0 that caused font features defined via fontconfig to be ignored (:iss:`7773`)
+
+0.36.1 [2024-08-24]
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 - Allow specifying that the :opt:`cursor shape for unfocused windows <cursor_shape_unfocused>` should remain unchanged (:pull:`7728`)
@@ -84,6 +89,8 @@ Detailed list of changes
 - Remote control: Fix a regression causing an escape code to leak when using @ launch with ``--no-response`` over the TTY (:iss:`7752`)
 
 - OSC 52: Fix a regression in the previous release that broke handling of invalid base64 encoded data in OSC 52 requests (:iss:`7757`)
+
+- macOS: Fix a regression in the previous release that caused :option:`kitty --single-instance` to not work when using :file:`macos-launch-services-cmdline`
 
 0.36.0 [2024-08-17]
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
