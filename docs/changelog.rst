@@ -79,6 +79,16 @@ Detailed list of changes
 
 - Linux: Fix a regression in 0.36.0 that caused font features defined via fontconfig to be ignored (:iss:`7773`)
 
+- :ac:`goto_tab`: Allow numbers less than ``-1`` to go to the Nth previously active tab
+
+- Wayland: Fix for upcoming explicit sync changes in Wayland compositors breaking kitty (:iss:`7767`)
+
+- Remote control: When listening on a UNIX domain socket only allow connections from processes having the same user id (:pull:`7777`)
+
+- kitten @: Fix a regression connecting to TCP sockets using plain IP addresses rather than hostnames (:iss:`7794`)
+
+- diff kitten: Fix a regression that broke diffing against remote files (:iss:`7797`)
+
 0.36.1 [2024-08-24]
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
