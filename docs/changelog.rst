@@ -74,7 +74,18 @@ consumption to do the same tasks.
 Detailed list of changes
 -------------------------------------
 
-0.36.2 [future]
+0.36.3 [future]
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+- Fix a regression in the previous release that broke use of the ``cd`` command in session files (:iss:`7829`)
+
+- macOS: Fix shortcuts that become entries in the global menubar being reported as removed shortcuts in the debug output
+
+- macOS: Fix :opt:`macos_option_as_alt` not working when :kbd:`caps lock` is engaged (:iss:`7836`)
+
+- Fix a regression when tinting of background images was introduced that caused window borders to have :opt:`background_opacity` applied to them (:iss:`7850`)
+
+0.36.2 [2024-09-06]
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 - Linux: Fix a regression in 0.36.0 that caused font features defined via fontconfig to be ignored (:iss:`7773`)
